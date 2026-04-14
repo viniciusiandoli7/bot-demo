@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Vinícius Iandoli Diogo">
+    <title>Case: Automação WhatsApp IA | Apex Fitness</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #09090b;
+            color: #fafafa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 60px;
+            align-items: center;
+        }
+
+        /* LADO ESQUERDO: TEXTO E CASE */
+        .case-info h1 {
+            font-size: 42px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        .case-info h1 span { color: #f59e0b; } /* Cor Laranja/Âmbar */
+        
+        .case-info p {
+            color: #a1a1aa;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .tech-stack {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .tech-badge {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #f59e0b;
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: #18181b;
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .result-item h4 { font-size: 32px; color: #fff; margin-bottom: 4px; }
+        .result-item p { font-size: 14px; color: #a1a1aa; margin: 0; }
+
+        /* LADO DIREITO: SIMULADOR DE WHATSAPP */
+        .phone-mockup {
+            width: 380px;
+            height: 750px;
+            background: #0b141a; /* Cor de fundo do zap dark */
+            border-radius: 40px;
+            border: 8px solid #27272a;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Detalhe da câmera do celular (Notch) */
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 25px;
+            background: #27272a;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            z-index: 10;
+        }
+
+        /* Header do WhatsApp */
+        .wa-header {
+            background: #202c33;
+            padding: 40px 16px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            z-index: 5;
+        }
+        .wa-avatar {
+            width: 40px;
+            height: 40px;
+            background: #f59e0b; /* Cor Laranja */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #fff;
+            font-size: 14px;
+        }
+        .wa-contact-info h3 { color: #e9edef; font-size: 16px; font-weight: 500; }
+        .wa-contact-info p { color: #8696a0; font-size: 13px; }
+
+        /* Área de Chat */
+        .wa-chat {
+            flex: 1;
+            padding: 20px 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            background-size: cover;
+            background-blend-mode: multiply;
+            background-color: rgba(11, 20, 26, 0.95);
+        }
+
+        .msg {
+            max-width: 85%;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 14.5px;
+            line-height: 1.4;
+            position: relative;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .msg.bot {
+            background: #202c33;
+            color: #e9edef;
+            align-self: flex-start;
+            border-top-left-radius: 0;
+        }
+        .msg.user {
+            background: #005c4b;
+            color: #e9edef;
+            align-self: flex-end;
+            border-top-right-radius: 0;
+        }
+
+        .msg-time {
+            font-size: 11px;
+            color: rgba(255,255,255,0.5);
+            float: right;
+            margin-top: 4px;
+            margin-left: 8px;
+        }
+
+        /* Indicador de Digitando */
+        .typing {
+            display: none;
+            align-items: center;
+            gap: 4px;
+            padding: 12px;
+            background: #202c33;
+            border-radius: 12px;
+            border-top-left-radius: 0;
+            width: fit-content;
+            align-self: flex-start;
+        }
+        .dot {
+            width: 6px; height: 6px; background: #8696a0; border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Botões de Ação para o Usuário testar */
+        .action-buttons {
+            background: #202c33;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .action-btn {
+            background: #005c4b;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+        }
+        .action-btn:hover { background: #008069; }
+        .action-btn:disabled { background: #2a3942; color: #8696a0; cursor: not-allowed; }
+
+        @media(max-width: 900px) {
+            .container { grid-template-columns: 1fr; justify-items: center; }
+            .case-info { text-align: center; }
+            .tech-stack { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="case-info">
+            <div class="tech-badge" style="margin-bottom: 16px; display: inline-block;">Lead Capture & Agendamento</div>
+            <h1>Assistente IA para <span>Apex Fitness</span></h1>
+            <p>Desenvolvimento de um robô inteligente no WhatsApp focado em academias e estúdios. O sistema responde dúvidas frequentes, converte curiosos em leads e agenda aulas experimentais automaticamente 24h por dia.</p>
+            
+            <div class="tech-stack">
+                <span class="tech-badge">Node.js</span>
+                <span class="tech-badge">Fluxo de Conversão</span>
+                <span class="tech-badge">WhatsApp API</span>
+                <span class="tech-badge">Integração CRM</span>
+            </div>
+
+            <div class="results">
+                <div class="result-item">
+                    <h4>+120%</h4>
+                    <p>Aumento no agendamento de aulas experimentais (Leads).</p>
+                </div>
+                <div class="result-item">
+                    <h4>Zero</h4>
+                    <p>Tempo de espera para o cliente saber o preço dos planos.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="phone-mockup">
+            <div class="phone-notch"></div>
+            
+            <div class="wa-header">
+                <div class="wa-avatar">AF</div>
+                <div class="wa-contact-info">
+                    <h3>Apex Fitness (IA)</h3>
+                    <p id="status">Online</p>
+                </div>
+            </div>
+
+            <div class="wa-chat" id="chat-box">
+                <div class="msg bot">
+                    Olá! Sou o assistente virtual da <b>Apex Fitness</b> 🏋️‍♂️. Como posso ajudar no seu treino hoje?
+                    <span class="msg-time">10:00</span>
+                </div>
+
+                <div class="typing" id="typing-indicator">
+                    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                </div>
+            </div>
+
+            <div class="action-buttons" id="action-area">
+                <button class="action-btn" onclick="sendUserMessage('Gostaria de agendar uma aula experimental.', 1)">Gostaria de agendar aula experimental</button>
+                <button class="action-btn" onclick="sendUserMessage('Quais são os valores dos planos?', 2)">Quais são os valores dos planos?</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const statusText = document.getElementById('status');
+        const actionArea = document.getElementById('action-area');
+
+        // Função para pegar a hora atual
+        function getTime() {
+            const now = new Date();
+            return now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        }
+
+        // Função que lida com o clique do usuário
+        function sendUserMessage(text, flowType) {
+            // Desabilita os botões
+            actionArea.innerHTML = '';
+
+            // 1. Renderiza a mensagem do usuário
+            const userMsg = document.createElement('div');
+            userMsg.className = 'msg user';
+            userMsg.innerHTML = `${text} <span class="msg-time">${getTime()}</span>`;
+            chatBox.insertBefore(userMsg, typingIndicator);
+
+            // 2. Simula o Bot digitando
+            simulateBotTyping(flowType);
+        }
+
+        function simulateBotTyping(flowType) {
+            // Rola para baixo
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            // Mostra "Digitando..."
+            setTimeout(() => {
+                typingIndicator.style.display = 'flex';
+                statusText.innerText = 'digitando...';
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 500);
+
+            // 3. Envia a resposta baseada na escolha
+            setTimeout(() => {
+                typingIndicator.style.display = 'none';
+                statusText.innerText = 'Online';
+                
+                const botMsg = document.createElement('div');
+                botMsg.className = 'msg bot';
+
+                if (flowType === 1) {
+                    botMsg.innerHTML = `Que legal! Temos vagas para aulas de <b>Cross Training</b>, <b>Musculação</b> e <b>FitDance</b> nesta semana. Qual modalidade você prefere conhecer? <span class="msg-time">${getTime()}</span>`;
+                    actionArea.innerHTML = `
+                        <button class="action-btn" onclick="sendUserMessage('Musculação', 3)">Musculação</button>
+                        <button class="action-btn" onclick="sendUserMessage('Cross Training', 3)">Cross Training</button>
+                    `;
+                } else if (flowType === 2) {
+                    botMsg.innerHTML = `Nós temos o <b>Plano Mensal (R$ 120/mês)</b> sem fidelidade, e o <b>Plano Anual (R$ 89/mês)</b> que te dá direito a trazer um amigo 4x no mês! Qual deles combina mais com você? <span class="msg-time">${getTime()}</span>`;
+                    actionArea.innerHTML = `
+                        <button class="action-btn" onclick="sendUserMessage('Achei interessante o Anual.', 4)">Achei interessante o Anual</button>
+                        <button class="action-btn" onclick="sendUserMessage('Quero falar com um humano.', 4)">Falar com a recepção</button>
+                    `;
+                } else {
+                    botMsg.innerHTML = `Perfeito! Registrei a sua solicitação no nosso sistema. Em instantes, um de nossos consultores vai finalizar o seu agendamento por aqui. Bora treinar! 💪 <span class="msg-time">${getTime()}</span>`;
+                    actionArea.innerHTML = `<p style="text-align:center; color:#a1a1aa; font-size:13px; margin-top:10px;">Fim da simulação de demonstração.</p>`;
+                }
+
+                chatBox.insertBefore(botMsg, typingIndicator);
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+            }, 2000); // Demora 2 segundos "digitando"
+        }
+    </script>
+</body>
+</html>
