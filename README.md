@@ -1,7 +1,6 @@
 # 🏋️‍♂️ Apex Fitness | Simulador de Assistente IA para WhatsApp
 
 ![Preview do Projeto](https://viniciusiandoli7.github.io/bot-demo/)
-*(Dica: Substitua a URL da imagem acima por um print screen real do seu simulador com o ecrã dividido)*
 
 ## 📖 Sobre o Projeto
 
