@@ -1,34 +1,36 @@
-# 🏋️‍♂️ Apex Fitness | Simulador de Assistente IA para WhatsApp
+# Apex Fitness | Assistente de WhatsApp
 
-![Preview do Projeto](https://viniciusiandoli7.github.io/bot-demo/)
-*(Dica: Substitua a URL da imagem acima por um print screen real do seu simulador com o ecrã dividido)*
+Demo interativa de um assistente de WhatsApp para academias. O visitante conversa com o bot (digitando ou tocando nas respostas) e acompanha, em um painel ao lado, o cadastro do lead que a recepção receberia.
 
-## 📖 Sobre o Projeto
+Demo online: https://viniciusiandoli7.github.io/bot-demo/
 
-O **Apex Fitness IA Bot** é um estudo de caso interativo desenvolvido para demonstrar o poder das automações de WhatsApp para ginásios, estúdios de fitness e *personal trainers*. 
+## O que a demo mostra
 
-Em vez de apenas descrever o serviço, este projeto apresenta um **simulador funcional construído em código** que permite aos potenciais clientes testarem a experiência do utilizador final. O bot simula a captação de *leads*, o agendamento de aulas experimentais e a apresentação de planos sem intervenção humana.
+- Conversa com texto livre e respostas rápidas: planos, horários, agendamento de aula experimental e chamada da recepção.
+- Agendamento completo: modalidade, dia (datas reais dos próximos dias), horário, nome e ingresso de confirmação no chat.
+- Painel da recepção preenchido ao vivo, com registro de eventos.
+- Barra de anilhas que ganha uma anilha a cada etapa do funil: contato, interesse, escolha e agendado.
+- Acessível: foco visível no teclado, `aria-live` no chat e `prefers-reduced-motion` respeitado.
 
-## ✨ Funcionalidades e UI/UX
+## Estrutura
 
-- **Simulador Realista de Interface:** Réplica fiel da interface do WhatsApp em *Dark Mode*, incluindo o notch do telemóvel e o cabeçalho de contacto.
-- **Interatividade Dinâmica (JavaScript):** O simulador responde aos cliques do utilizador, criando balões de mensagens em tempo real.
-- **Animações de "A Escrever...":** Implementação de animações CSS (*keyframes*) para os três pontos flutuantes, simulando o delay natural de uma IA a processar a resposta.
-- **Dashboard de Métricas (ROI):** Painel lateral que destaca os resultados de negócio (ex: +120% em agendamentos), provando o Retorno sobre o Investimento ao dono do ginásio.
-- **Design Responsivo:** O layout em grelha (*CSS Grid*) adapta-se perfeitamente, empilhando o texto e o simulador em ecrãs mais pequenos.
+```
+index.html        marcação da página
+css/styles.css    tokens de cor e tipografia, layout, celular e painel
+js/data.js        modalidades, horários e planos
+js/util.js        helpers (normalização de texto, hora) e estado da conversa
+js/panel.js       barra de anilhas, cadastro do lead e registro de eventos
+js/chat.js        mensagens, digitação, respostas rápidas e leitura do texto
+js/flows.js       roteador de intenções e fluxos da conversa
+js/main.js        início e reinício da demo
+```
 
-## 🛠️ Tecnologias Utilizadas
+Os scripts são clássicos (sem módulos), carregados em ordem pelo `index.html`, então a página também abre direto pelo arquivo, sem servidor.
 
-Este simulador foi construído focando na leveza e na manipulação do DOM em tempo real:
+## Como rodar
 
-- **HTML5:** Estruturação semântica do estudo de caso e do *mockup* do telemóvel.
-- **CSS3:** - Animações complexas (`@keyframes`) para o efeito de "fade-in" das mensagens e o indicador de digitação.
-  - **CSS Grid** e **Flexbox** para a estrutura e alinhamento dos elementos.
-  - Estilização de botões e *badges* com a paleta de cores energéticas (Âmbar/Laranja e Preto).
-- **JavaScript (Vanilla):** - Lógica assíncrona com `setTimeout` para criar fluxos de conversação naturais.
-  - Criação e injeção de elementos no DOM dinamicamente (`document.createElement`, `insertBefore`).
-- **Google Fonts:** Utilização da fonte `Inter` para máxima legibilidade.
+Abra o `index.html` no navegador. Não precisa instalar nada.
 
-## 🚀 Como Executar o Projeto
+## Para adaptar a outro cliente
 
-Como este simulador é feito integralmente em Front-end Vanilla, não requer a instalação de pacotes ou servidores complexos:
+Troque modalidades, horários e planos em `js/data.js`, os textos dos fluxos em `js/flows.js` e as cores das anilhas em `css/styles.css`.
