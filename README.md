@@ -1,6 +1,10 @@
 # Apex Fitness | Assistente de WhatsApp
 
+<<<<<<< HEAD
 Demo interativa de um assistente de WhatsApp para academias. O visitante conversa com o bot (digitando ou tocando nas respostas) e acompanha, em um painel ao lado, o cadastro do lead que a recepção receberia.
+=======
+(https://viniciusiandoli7.github.io/bot-demo/)
+>>>>>>> 862ea5840c031b9c305cae0b48a301bcb473bc70
 
 Demo online: https://viniciusiandoli7.github.io/bot-demo/
 
